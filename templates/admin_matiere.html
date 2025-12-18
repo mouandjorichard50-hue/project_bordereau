@@ -1,0 +1,38 @@
+{% extends "base_layout.html" %}
+{% block content %}
+<h2>Gestion des Matières</h2>
+
+<form method="POST">
+    <label>Nom de la Matière :</label>
+    <input type="text" name="nom_matiere" required>
+    
+    <label>Nom du Professeur :</label>
+    <input type="text" name="nom_professeur" required>
+    
+    <label>Coefficient (1 à 9) :</label>
+    <input type="number" name="coefficient" min="1" max="9" value="1" required>
+    
+    <button type="submit">Créer la matière</button>
+</form>
+
+<hr>
+<h3>Matières enregistrées</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Matière</th>
+            <th>Professeur</th>
+            <th>Coefficient</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in matieres %}
+        <tr>
+            <td>{{ m.nom_matiere }}</td>
+            <td>{{ m.nom_professeur }}</td>
+            <td>{{ m.coefficient }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

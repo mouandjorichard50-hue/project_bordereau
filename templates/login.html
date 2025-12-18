@@ -1,0 +1,15 @@
+{% extends "base_layout.html" %}
+{% block content %}
+<div style="max-width: 400px; margin: 50px auto;">
+    <h2>Connexion Étudiant</h2>
+    <form method="POST">
+        <label>Matricule Étudiant (ex: 24G001) :</label>
+        <input type="text" name="matricule" required placeholder="Entrez votre matricule">
+        
+        <label>Mot de passe :</label>
+        <input type="password" name="password" required placeholder="Entrez votre mot de passe">
+        
+        <button type="submit">Se connecter</button>
+    </form>
+</div>
+{% endblock %}

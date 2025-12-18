@@ -1,0 +1,72 @@
+{% extends "base_layout.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>📊 Bulletin de Notes : {{ user.nom }}</h2>
+    <p>Matricule : <strong>{{ user.matricule }}</strong></p>
+
+    <div style="background: #2575fc; color: white; padding: 15px; border-radius: 8px; margin-bottom: 30px;">
+        <h3 style="margin: 0;">Moyenne Générale : {{ "%.2f"|format(moyenne) }} / 20</h3>
+    </div>
+
+    {# Liste des sessions pour créer les tableaux #}
+    {% set sessions = ['Contrôle Continu', 'Session Normale', 'Rattrapage'] %}
+
+    {% for s_name in sessions %}
+        <div class="session-section" style="margin-bottom: 40px;">
+            <h3 style="border-left: 5px solid #2c3e50; padding-left: 10px; color: #2c3e50; background: #edeff1; padding: 10px;">
+                {{ s_name }}
+            </h3>
+            
+            <table>
+                <thead>
+                    <tr style="background-color: #34495e; color: white;">
+                        <th>Matière</th>
+                        <th>Coefficient</th>
+                        <th>Note</th>
+                        <th>Réclamation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {# Utilisation d'un filtre pour vérifier si des notes existent pour cette session #}
+                    {% set ns = namespace(found=false) %}
+                    
+                    {% for note in notes %}
+                        {% if note.session == s_name %}
+                            {% set ns.found = true %}
+                            <tr>
+                                <td>{{ note.matiere.nom_matiere }}</td>
+                                <td>{{ note.matiere.coefficient }}</td>
+                                <td style="font-weight: bold; color: {% if note.note_obtenue < 10 %}#e74c3c{% else %}#27ae60{% endif %};">
+                                    {{ note.note_obtenue }}
+                                </td>
+                                <td>
+                                    {% if note.requete_erreur %}
+                                        <span style="color: #e67e22; font-size: 0.85em;">⌛ En cours de traitement...</span>
+                                    {% else %}
+                                        <a href="{{ url_for('formulaire_requete', note_id=note.id) }}" style="color: #3498db; text-decoration: none; font-size: 0.85em;">🚩 Signaler erreur</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if not ns.found %}
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: #95a5a6; font-style: italic;">
+                                Aucune note enregistrée pour cette session.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+
+    <div style="text-align: center; margin-top: 50px;">
+        <button onclick="window.print()" style="background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+            🖨️ Imprimer mon bulletin
+        </button>
+    </div>
+</div>
+{% endblock %}

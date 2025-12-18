@@ -1,0 +1,85 @@
+{% extends "base_layout.html" %}
+
+{% block content %}
+<div class="admin-container">
+    <h1>Tableau de Bord Administration</h1>
+
+    <div style="margin-bottom: 30px; display: flex; gap: 10px;">
+        <a href="{{ url_for('gestion_matiere') }}" class="btn-edit" style="background-color: #3498db; text-decoration: none;">Gérer les Matières</a>
+        <a href="{{ url_for('saisie_note') }}" class="btn-edit" style="background-color: #2ecc71; text-decoration: none;">Saisie Collective des Notes</a>
+    </div>
+
+    <hr>
+
+    <div style="background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <h3>+ Ajouter un étudiant</h3>
+        <form action="{{ url_for('ajouter_etudiant') }}" method="POST" style="display: flex; gap: 15px; box-shadow: none; padding: 0;">
+            <input type="text" name="nom" placeholder="Nom complet" required>
+            <input type="text" name="password" placeholder="Mot de passe" required>
+            <button type="submit" style="margin-top: 0;">Créer l'accès</button>
+        </form>
+    </div>
+
+    <h2 style="color: #e67e22;">⚠️ Réclamations des élèves</h2>
+    <table>
+        <thead style="background-color: #e67e22;">
+            <tr>
+                <th>Élève (Matricule)</th>
+                <th>Matière</th>
+                <th>Note actuelle</th>
+                <th>Message & Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for note in notes_avec_requetes %}
+            <tr>
+                <td>{{ note.etudiant.nom }} ({{ note.etudiant.matricule }})</td>
+                <td>{{ note.matiere.nom_matiere }}</td>
+                <td><strong>{{ note.note_obtenue }} / 20</strong></td>
+                <td style="background-color: #fff9f0;">
+                    <small style="color: #7f8c8d;">
+                        📅 Envoyé le : {{ note.date_creation.strftime('%d/%m/%Y à %H:%M') }}
+                    </small><br>
+                    <strong>Message :</strong> {{ note.requete_erreur }}
+                </td>
+                <td>
+                    <a href="{{ url_for('saisie_note') }}" class="btn-edit" style="background: #e67e22; text-decoration: none;">Corriger</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align:center;">Aucune réclamation en attente.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>📋 Liste des accès élèves</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom de l'élève (A-Z)</th>
+                <th>Matricule</th>
+                <th>Mot de passe</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for etu in etudiants %}
+            <tr>
+                <td>{{ etu.nom }}</td>
+                <td><strong style="color: #2575fc;">{{ etu.matricule }}</strong></td>
+                <td><code>{{ etu.password_hash }}</code></td>
+                <td>
+                    <a href="{{ url_for('modifier_etudiant', id=etu.id) }}" style="color: #3498db; text-decoration: none; margin-right: 10px;">✏️ Modifier</a>
+                    <a href="{{ url_for('supprimer_etudiant', id=etu.id) }}" style="color: #e74c3c; text-decoration: none;" onclick="return confirm('Supprimer définitivement cet étudiant et ses notes ?')">🗑️ Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

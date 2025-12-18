@@ -1,0 +1,15 @@
+{% extends "base_layout.html" %}
+{% block content %}
+<div style="max-width: 400px; margin: 50px auto; border-top: 5px solid #e74c3c;">
+    <h2 style="color: #e74c3c;">Connexion Administration</h2>
+    <form method="POST">
+        <label>Matricule Admin (ex: ADM01) :</label>
+        <input type="text" name="matricule" required>
+        
+        <label>Mot de passe :</label>
+        <input type="password" name="password" required>
+        
+        <button type="submit" style="background: #e74c3c;">Accéder à la gestion</button>
+    </form>
+</div>
+{% endblock %}

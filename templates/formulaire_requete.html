@@ -1,0 +1,26 @@
+{% extends "base_layout.html" %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 40px auto;">
+    <h2>Signaler une erreur de note</h2>
+    
+    <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ffeeba;">
+        <strong>Détails de la note :</strong><br>
+        Matière : {{ note.matiere.nom_matiere }}<br>
+        Session : {{ note.session }}<br>
+        Note actuelle : {{ note.note_obtenue }} / 20
+    </div>
+
+    <form method="POST">
+        <label for="requete_text">Expliquez l'erreur constatée :</label>
+        <textarea name="requete_text" id="requete_text" rows="5" required 
+            placeholder="Ex: Bonjour Monsieur, j'ai eu 15 au CC mais le système affiche 12..." 
+            style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; font-family: inherit;"></textarea>
+        
+        <div style="margin-top: 20px;">
+            <button type="submit" style="background-color: #e67e22;">Envoyer la réclamation</button>
+            <a href="{{ url_for('dashboard') }}" style="margin-left: 15px; color: #7f8c8d; text-decoration: none;">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

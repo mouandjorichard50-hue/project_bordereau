@@ -1,0 +1,11 @@
+{% extends "base_layout.html" %}
+{% block content %}
+<div style="text-align: center; padding: 50px 0;">
+    <h1>Bienvenue sur le portail de gestion des notes</h1>
+    <p>Sélectionnez votre profil pour continuer :</p>
+    <div style="margin-top: 30px;">
+        <a href="{{ url_for('login') }}" class="btn-edit" style="background: #2575fc; padding: 15px 30px;">Je suis un Étudiant</a>
+        <a href="{{ url_for('admin_login') }}" class="btn-edit" style="background: #333; padding: 15px 30px; margin-left: 10px;">Je suis un Administrateur</a>
+    </div>
+</div>
+{% endblock %}

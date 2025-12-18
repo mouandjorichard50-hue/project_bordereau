@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Notes v2025</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="brand">Scolarité Plus</a>
+            <div class="nav-links">
+                {% if session.get('user_id') %}
+                    {% if session.get('is_admin') %}
+                        <a href="{{ url_for('admin_dashboard') }}">Admin Panel</a>
+                    {% else %}
+                        <a href="{{ url_for('dashboard') }}">Mon Bulletin</a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}" class="logout">Déconnexion</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Espace Étudiant</a>
+                    <a href="{{ url_for('admin_login') }}">Espace Admin</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

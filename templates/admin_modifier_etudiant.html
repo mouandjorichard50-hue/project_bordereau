@@ -1,0 +1,18 @@
+{% extends "base_layout.html" %}
+{% block content %}
+<div style="max-width: 500px; margin: 50px auto;">
+    <h2>Modifier l'étudiant : {{ etu.matricule }}</h2>
+    <form method="POST">
+        <label>Nom complet :</label>
+        <input type="text" name="nom" value="{{ etu.nom }}" required>
+        
+        <label>Mot de passe (Modifier si besoin) :</label>
+        <input type="text" name="password" value="{{ etu.password_hash }}" required>
+        
+        <div style="margin-top: 20px;">
+            <button type="submit" style="background: #27ae60;">Enregistrer les modifications</button>
+            <a href="{{ url_for('admin_dashboard') }}" style="margin-left: 10px; color: #7f8c8d;">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
