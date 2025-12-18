@@ -6,6 +6,8 @@ import os
 
 app = Flask(__name__)
 app.secret_key = 'cle_secrete_scolarite_2025_finale'
+
+# Configuration du chemin de la base de données pour Render
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'ecole_v3.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -127,7 +129,6 @@ def admin_login():
 @admin_required
 def admin_dashboard():
     requetes = Note.query.filter(Note.requete_erreur != None).order_by(Note.date_creation.desc()).all()
-    # Tri alphabétique pour la liste principale
     etudiants = User.query.filter_by(is_admin=False).order_by(User.nom.asc()).all()
     return render_template('admin_dashboard.html', notes_avec_requetes=requetes, etudiants=etudiants)
 
@@ -161,7 +162,6 @@ def modifier_etudiant(id):
 @admin_required
 def supprimer_etudiant(id):
     etu = User.query.get_or_404(id)
-    # On supprime d'abord ses notes pour éviter les erreurs de lien
     Note.query.filter_by(user_id=id).delete()
     db.session.delete(etu)
     db.session.commit()
@@ -212,11 +212,19 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+# ==========================================
+# LANCEMENT ET CRÉATION BDD
+# ==========================================
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        # Création auto de l'admin si inexistant
         if not User.query.filter_by(matricule='ADM01').first():
             adm = User(nom="Direction", matricule="ADM01", password_hash="admin123", is_admin=True)
             db.session.add(adm)
             db.session.commit()
-    app.run(debug=True)
+    
+    # Configuration cruciale pour Render (Host et Port)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
